@@ -4,6 +4,8 @@ import pygame
 
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
 FPS = 60
+main_menu = True
+NIK = 'Без профиля'
 
 
 class Button(pygame.sprite.Sprite):
@@ -106,7 +108,12 @@ def on_version():
 
 
 def on_profiles():
-    print('Профили')
+    main_menu = False
+    buttons.clear(screen, image)
+    WINDOW_SIZE = 500, 500
+    pygame.display.set_mode((WINDOW_SIZE))
+    screen.fill((0, 0, 0))
+    pygame.display.flip()
 
 
 def buttons_def():
@@ -119,10 +126,10 @@ def buttons_def():
     Button((315, 330), " Выход    ", 36, "red on yellow",
            hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
            command=on_exit)
-    Button((0, 465), " Версии    ", 36, "red on green",
+    Button((0, 465), " Версии ", 36, "red on green",
            hover_colors="blue on green", style=2, borderc=(255, 255, 0),
            command=on_version)
-    Button((605, 5), " Профиль    ", 36, "red on green",
+    Button((625, 5), " Профиль ", 36, "red on green",
            hover_colors="blue on green", style=2, borderc=(255, 255, 0),
            command=on_profiles)
 
@@ -151,22 +158,23 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+            if main_menu:
+                # Текстовые данные на экране
+                # Название
+                font = pygame.font.Font(None, 100)
+                text = font.render('The Roped', True, (0, 200, 0))
+                screen.blit(text, (225, 100))
 
-            # Текстовые данные на экране
-            # Название
-            font = pygame.font.Font(None, 100)
-            text = font.render('The Roped', True, (0, 200, 0))
-            screen.blit(text, (225, 100))
+                # Версия
+                font = pygame.font.Font(None, 25)
+                text = font.render('Version: 0.0.1 (alpha)', True, (0, 200, 0))
+                screen.blit(text, (5, 440))
 
-            # Версия
-            font = pygame.font.Font(None, 25)
-            text = font.render('Version: 0.0.1 (alpha)', True, (0, 200, 0))
-            screen.blit(text, (5, 440))
-
-            # Вывод ника
-            draw_nik('Ник профиля')
-        buttons.update()
-        buttons.draw(screen)
+                # Вывод ника
+                draw_nik(NIK)
+        if main_menu:
+            buttons.update()
+            buttons.draw(screen)
         clock.tick(FPS)
         pygame.display.flip()
 pygame.quit()
