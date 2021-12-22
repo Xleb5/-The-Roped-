@@ -10,7 +10,7 @@ class Button(pygame.sprite.Sprite):
                  colors="white on blue",
                  hover_colors="red on green",
                  style=1, borderc=(255, 255, 255),
-                 command=lambda: print("No command activated for this button")):
+                 command=lambda: print("No command activated for this button"), screen=None):
         # the hover_colors attribute needs to be fixed
         super().__init__()
         self.text = text

@@ -2,7 +2,6 @@ import os
 import sys
 import pygame
 
-
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
 FPS = 60
 
@@ -35,26 +34,26 @@ class Button(pygame.sprite.Sprite):
         buttons.add(self)
 
     def render(self):
-        self.text_render = self.font.render(self.text, 1, self.fg)
+        self.text_render = self.font.render(self.text, True, self.fg)
         self.image = self.text_render
 
     def update(self):
         self.fg, self.bg = self.colors.split(" on ")
         if self.style == 1:
-            self.draw_button1()
+            self.draw_button()
         elif self.style == 2:
-            self.draw_button2()
+            self.draw_button_fone()
         self.hover()
         self.click()
 
-    def draw_button1(self):
+    def draw_button(self):
         pygame.draw.line(screen, (150, 150, 150), (self.x, self.y), (self.x + self.w, self.y), 5)
         pygame.draw.line(screen, (150, 150, 150), (self.x, self.y - 2), (self.x, self.y + self.h), 5)
         pygame.draw.line(screen, (50, 50, 50), (self.x, self.y + self.h), (self.x + self.w, self.y + self.h), 5)
         pygame.draw.line(screen, (50, 50, 50), (self.x + self.w, self.y + self.h), [self.x + self.w, self.y], 5)
         pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h))
 
-    def draw_button2(self):
+    def draw_button_fone(self):
         pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h), 0, 13)
 
     def hover(self):
@@ -102,16 +101,36 @@ def on_shop():
     print("А тут магазин")
 
 
+def on_version():
+    print('Версии')
+
+
+def on_profiles():
+    print('Профили')
+
+
 def buttons_def():
     Button((315, 200), " Играть    ", 36, "red on yellow",
-                hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-                command=on_play)
+           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+           command=on_play)
     Button((315, 265), " Магазин ", 36, "red on yellow",
-                hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-                command=on_shop)
+           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+           command=on_shop)
     Button((315, 330), " Выход    ", 36, "red on yellow",
-                hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-                command=on_exit)
+           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+           command=on_exit)
+    Button((0, 465), " Версии    ", 36, "red on green",
+           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
+           command=on_version)
+    Button((605, 5), " Профиль    ", 36, "red on green",
+           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
+           command=on_profiles)
+
+
+def draw_nik(nik):
+    font = pygame.font.Font(None, 25)
+    text = font.render(nik, True, (0, 200, 0))
+    screen.blit(text, (800 - len(nik) * 12, 50))
 
 
 if __name__ == '__main__':
@@ -124,6 +143,7 @@ if __name__ == '__main__':
     image = load_image("fon.jpg")
     running = True
     screen.blit(image, (0, 0))
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -131,6 +151,20 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+
+            # Текстовые данные на экране
+            # Название
+            font = pygame.font.Font(None, 100)
+            text = font.render('The Roped', True, (0, 200, 0))
+            screen.blit(text, (225, 100))
+
+            # Версия
+            font = pygame.font.Font(None, 25)
+            text = font.render('Version: 0.0.1 (alpha)', True, (0, 200, 0))
+            screen.blit(text, (5, 440))
+
+            # Вывод ника
+            draw_nik('Ник профиля')
         buttons.update()
         buttons.draw(screen)
         clock.tick(FPS)
