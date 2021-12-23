@@ -5,7 +5,11 @@ import pygame
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
 FPS = 60
 main_menu = True
+mm_running = True
+p_running = False
 NIK = 'Без профиля'
+global screen
+global buttons
 
 
 class Button(pygame.sprite.Sprite):
@@ -108,12 +112,27 @@ def on_version():
 
 
 def on_profiles():
+    global buttons
+    global screen
+    global main_menu
+    global mm_running
+    global p_running
+
+    pygame.quit()
     main_menu = False
-    buttons.clear(screen, image)
-    WINDOW_SIZE = 500, 500
-    pygame.display.set_mode((WINDOW_SIZE))
-    screen.fill((0, 0, 0))
-    pygame.display.flip()
+    mm_running = False
+    p_running = True
+    pygame.init()
+    pygame.display.set_caption('Профили')
+    size = width, height = 500, 500
+    screen = pygame.display.set_mode(size)
+    buttons = pygame.sprite.Group()
+    profiles_buttons_def()
+    while p_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                p_running = False
+        pygame.display.flip()
 
 
 def buttons_def():
@@ -134,13 +153,23 @@ def buttons_def():
            command=on_profiles)
 
 
+def profiles_buttons_def():
+    Button((315, 200), " Играть    ", 36, "red on yellow",
+           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+           command=on_play)
+
+
 def draw_nik(nik):
     font = pygame.font.Font(None, 25)
     text = font.render(nik, True, (0, 200, 0))
     screen.blit(text, (800 - len(nik) * 12, 50))
 
 
-if __name__ == '__main__':
+def main_menu():
+    global buttons
+    global screen
+    global mm_running
+
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_SIZE))
     pygame.display.set_caption('The Roped')
@@ -148,16 +177,16 @@ if __name__ == '__main__':
     buttons = pygame.sprite.Group()
     buttons_def()
     image = load_image("fon.jpg")
-    running = True
+    mm_running = True
     screen.blit(image, (0, 0))
 
-    while running:
+    while mm_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                mm_running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    running = False
+                    mm_running = False
             if main_menu:
                 # Текстовые данные на экране
                 # Название
@@ -177,4 +206,7 @@ if __name__ == '__main__':
             buttons.draw(screen)
         clock.tick(FPS)
         pygame.display.flip()
+
+
+main_menu()
 pygame.quit()
