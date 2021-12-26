@@ -132,6 +132,9 @@ def on_profiles():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 p_running = False
+        font = pygame.font.Font(None, 25)
+        text = font.render('Version: 0.0.1 (alpha)', True, (0, 200, 0))
+        screen.blit(text, (5, 440))
         pygame.display.flip()
 
 
