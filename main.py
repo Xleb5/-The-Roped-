@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
             # Версия
             font = pygame.font.Font(None, 25)
-            text = font.render('Version: 0.0.1 (alpha)', True, (0, 200, 0))
+            text = font.render('Version: 0.0.2 (alpha)', True, (0, 200, 0))
             screen.blit(text, (5, 440))
 
             # Вывод ника
