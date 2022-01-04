@@ -8,15 +8,13 @@ main_menu = True
 mm_running = True
 p_running = False
 NIK = 'Без профиля'
-global screen
-global buttons
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, position, text, size,
+    def __init__(self, position, text, size, indent,
                  colors="white on blue",
                  hover_colors="red on green",
-                 style=2, borderc=(255, 255, 255),
+                 style=2,
                  command=lambda: print("No command activated for this button")):
         super().__init__()
         self.text = text
@@ -24,17 +22,14 @@ class Button(pygame.sprite.Sprite):
         self.colors = colors
         self.original_colors = colors
         self.fg, self.bg = self.colors.split(" on ")
-        if hover_colors == "red on green":
-            self.hover_colors = f"{self.bg} on {self.fg}"
-        else:
-            self.hover_colors = hover_colors
+        self.hover_colors = hover_colors
         self.style = style
-        self.borderc = borderc
         self.font = pygame.font.SysFont("Arial", size)
         self.render()
         self.x, self.y, self.w, self.h = self.text_render.get_rect()
         self.x, self.y = position
-        self.rect = pygame.Rect((self.x, self.y), (self.w, self.h))
+        self.rect = pygame.Rect((self.x, self.y), (self.w + indent, self.h))
+        self.indent = indent
         self.position = position
         self.pressed = 1
         buttons.add(self)
@@ -45,22 +40,12 @@ class Button(pygame.sprite.Sprite):
 
     def update(self):
         self.fg, self.bg = self.colors.split(" on ")
-        if self.style == 1:
-            self.draw_button()
-        elif self.style == 2:
-            self.draw_button_fone()
+        self.draw_button_fone()
         self.hover()
         self.click()
 
-    def draw_button(self):
-        pygame.draw.line(screen, (150, 150, 150), (self.x, self.y), (self.x + self.w, self.y), 5)
-        pygame.draw.line(screen, (150, 150, 150), (self.x, self.y - 2), (self.x, self.y + self.h), 5)
-        pygame.draw.line(screen, (50, 50, 50), (self.x, self.y + self.h), (self.x + self.w, self.y + self.h), 5)
-        pygame.draw.line(screen, (50, 50, 50), (self.x + self.w, self.y + self.h), [self.x + self.w, self.y], 5)
-        pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h))
-
     def draw_button_fone(self):
-        pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h), 0, 13)
+        pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w + self.indent, self.h), 0, 13)
 
     def hover(self):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -72,7 +57,6 @@ class Button(pygame.sprite.Sprite):
     def click(self):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             if pygame.mouse.get_pressed()[0] and self.pressed == 1:
-                print("Execunting code for button '" + self.text + "'")
                 self.command()
                 self.pressed = 0
             if pygame.mouse.get_pressed() == (0, 0, 0):
@@ -139,26 +123,26 @@ def on_profiles():
 
 
 def buttons_def():
-    Button((315, 200), " Играть    ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+    Button((315, 200), "Играть", 36, 20, "red on yellow",
+           hover_colors="blue on orange", style=2,
            command=on_play)
-    Button((315, 265), " Магазин ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+    Button((315, 265), "Магазин", 36, 0, "red on yellow",
+           hover_colors="blue on orange", style=2,
            command=on_shop)
-    Button((315, 330), " Выход    ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+    Button((315, 330), "Выход", 36, 0, "red on yellow",
+           hover_colors="blue on orange", style=2,
            command=on_exit)
-    Button((0, 465), " Версии ", 36, "red on green",
-           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
+    Button((0, 465), "Версии", 36, 0, "red on green",
+           hover_colors="blue on green", style=2,
            command=on_version)
-    Button((625, 5), " Профиль ", 36, "red on green",
-           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
+    Button((625, 5), "Профиль", 36, 0, "red on green",
+           hover_colors="blue on green", style=2,
            command=on_profiles)
 
 
 def profiles_buttons_def():
-    Button((315, 200), " Играть    ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
+    Button((315, 200), " Играть    ", 36, 0, "red on yellow",
+           hover_colors="blue on orange", style=2,
            command=on_play)
 
 
