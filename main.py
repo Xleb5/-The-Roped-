@@ -1,75 +1,61 @@
-import os
 import sys
 import pygame
-import pygame_gui
+from buttons import Button
+from functions import load_image, music
+
 
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
-FPS = 60
-main_menu = True
-mm_running = True
-p_running = False
-NIK = 'Без профиля'
 
 
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image
+class Menu:
+    def __init__(self):
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.set_caption('The Roped')
+        self.clock = pygame.time.Clock()
+        gui_font = pygame.font.SysFont("Arial", 25)
+        self.buttons = []
+        Button(self.buttons, 'старт', 200, 40, (300, 200), 4, gui_font)
+        Button(self.buttons, 'магазин', 200, 40, (300, 260), 4, gui_font)
+        Button(self.buttons, 'выход', 200, 40, (300, 320), 4, gui_font, function=lambda: sys.exit())
+        Button(self.buttons, 'профиль', 90, 30, (705, 10), 4, pygame.font.SysFont("Arial", 20),
+               function=self.pprriinntt)
+        self.image = load_image("fon.jpg")
+
+    def buttons_draw(self):
+        for b in self.buttons:
+            b.update(self.screen)
+
+    def pprriinntt(self):
+        print('pprriinntt')
+
+    def run(self):
+        m_running = True
+        while m_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    m_running = False
+            self.screen.blit(self.image, (0, 0))
+            font = pygame.font.SysFont('Arial', 100)
+            text = font.render('The Roped', True, (100, 100, 120))
+            self.screen.blit(text, (200, 50))
+            font = pygame.font.SysFont('Arial', 18)
+            text = font.render('Version: 0.0.2 (alpha)', True, (0, 0, 0))
+            self.screen.blit(text, (4, 477))
+            self.buttons_draw()
+            pygame.display.update()
+            self.clock.tick(60)
 
 
-def main_menu():
-    pygame.init()
-    screen = pygame.display.set_mode((WINDOW_SIZE))
-    pygame.display.set_caption('The Roped')
-    clock = pygame.time.Clock()
-    buttons = pygame.sprite.Group()
-    image = load_image("fon.jpg")
-    mm_running = True
-    screen.blit(image, (0, 0))
-    manager = pygame_gui.UIManager(WINDOW_SIZE)
-    start = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((30, 30), (70, 20)),
-                                         text='start',
-                                         manager=manager)
-    all_sprites = pygame.sprite.Group()
-    all_sprites.add(start)
-    all_sprites.draw(screen)
-    while mm_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                mm_running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    mm_running = False
-            if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == start:
-                    print('start')
-        if main_menu:
-            # Текстовые данные на экране
-            # Название
-            font = pygame.font.Font(None, 100)
-            text = font.render('The Roped', True, (0, 200, 0))
-            screen.blit(text, (225, 100))
-            # Версия
-            font = pygame.font.Font(None, 25)
-            text = font.render('Version: 0.0.2 (alpha)', True, (0, 200, 0))
-            screen.blit(text, (5, 440))
-
-            # Вывод ника
-            buttons.update()
-            buttons.draw(screen)
-        clock.tick(FPS)
-        pygame.display.flip()
-
-
-main_menu()
+pygame.init()
+music()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    cd = Menu()
+    cd.run()
+    pygame.quit()
+    break
 pygame.quit()
+sys.exit()
