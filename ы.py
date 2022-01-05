@@ -7,7 +7,7 @@ pygame.init()
 screen = pygame.display.set_mode((500, 500))
 pygame.display.set_caption('Gui Menu')
 clock = pygame.time.Clock()
-gui_font = pygame.font.SysFont("Mistral", 30)
+gui_font = pygame.font.SysFont("Arial", 30)
 buttons = []
 button1 = Button(buttons, 'старт', 200, 40, (100, 200), 4, gui_font)
 button2 = Button(buttons, 'магазин', 200, 40, (100, 250), 4, gui_font)
