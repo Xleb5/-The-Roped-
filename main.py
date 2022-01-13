@@ -30,7 +30,7 @@ class Menu:
         text = font.render('The Roped', True, (100, 100, 120))
         self.screen.blit(text, (200, 50))
         font = pygame.font.SysFont('Arial', 18)
-        text = font.render('Version: 0.0.2 (alpha)', True, (0, 0, 0))
+        text = font.render('Version: 0.0.3 (alpha)', True, (0, 0, 0))
         self.screen.blit(text, (4, 477))
 
     def buttons_update(self):
@@ -79,7 +79,7 @@ class LevelMenu(Menu):
 
 
 pygame.init()
-music()
+#music()
 running = True
 while running:
     for event in pygame.event.get():
