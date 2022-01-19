@@ -1,7 +1,7 @@
 import pygame
 
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
 # Перед вызовом функции старт LEVEL необходимо задать как класс Level_X()
 LEVEL = None
 bg = pygame.transform.scale(pygame.image.load('bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -123,12 +123,12 @@ class Level_1(Level):
 
         # Платформы
         platforms = [
-            [520, 470],
-            [200, 600],
-            [400, 600],
-            [520, 650],
-            [600, 700],
-            [660, 770],
+            [520, 170],
+            [200, 300],
+            [400, 300],
+            [520, 350],
+            [600, 400],
+            [660, 470],
         ]
         for platform in platforms:
             block = Platform()
@@ -218,7 +218,7 @@ class Level_4(Level):
             self.platform_list.add(block)
 
 
-def start():
+def startt():
     pygame.init()
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
@@ -300,4 +300,4 @@ def start():
 
 
 LEVEL = Level_1
-start()
+startt()
