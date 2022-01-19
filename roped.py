@@ -73,12 +73,35 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
+player1 = Player(pygame.image.load('idle.png'))
+player2 = Player(pygame.image.load('idle.png'))
+
+
 # Класс платформы
 class Platform(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('platform.png')
         self.rect = self.image.get_rect()
+
+
+class Flag(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('flag.png'), (63, 74))
+        self.rect = self.image.get_rect()
+
+
+class Coin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('coin.png'), (38, 38))
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        if pygame.sprite.collide_rect(self, player1):
+            print(1)
+            del(LEVEL.platform_list[LEVEL.platform_list.index(self)])
 
 
 class Level(object):
@@ -98,7 +121,8 @@ class Level_1(Level):
     def __init__(self, player):
         Level.__init__(self, player)
 
-        level = [
+        # Платформы
+        platforms = [
             [520, 470],
             [200, 600],
             [400, 600],
@@ -106,12 +130,28 @@ class Level_1(Level):
             [600, 700],
             [660, 770],
         ]
-
-        for platform in level:
+        for platform in platforms:
             block = Platform()
             block.rect.x = platform[0]
             block.rect.y = platform[1]
             block.player = self.player
+            self.platform_list.add(block)
+
+        # Finish
+        block = Flag()
+        block.rect.x = 75
+        block.rect.y = 75
+        block.player = self.player
+        self.platform_list.add(block)
+
+        # Монеты
+        coins = [
+            [520, 750],
+        ]
+        for coin in coins:
+            block = Coin()
+            block.rect.x = coin[0]
+            block.rect.y = coin[1]
             self.platform_list.add(block)
 
 
@@ -183,8 +223,6 @@ def start():
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("The Roped")
-    player1 = Player(pygame.image.load('idle.png'))
-    player2 = Player(pygame.image.load('idle.png'))
 
     level_list = []
     level_list.append(LEVEL(player1))
@@ -259,3 +297,7 @@ def start():
                          (x1 + 30, y1 + 50), (x2 + 30, y2 + 50), 7)
         pygame.display.flip()
     pygame.quit()
+
+
+LEVEL = Level_1
+start()
