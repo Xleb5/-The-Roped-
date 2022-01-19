@@ -142,17 +142,15 @@ class Level_1(Level):
         block.rect.x = 75
         block.rect.y = 75
         block.player = self.player
-        self.platform_list.add(block)
 
         # Монеты
         coins = [
-            [520, 750],
+            [520, 500],
         ]
         for coin in coins:
             block = Coin()
             block.rect.x = coin[0]
             block.rect.y = coin[1]
-            self.platform_list.add(block)
 
 
 class Level_2(Level):
@@ -240,14 +238,14 @@ def startt(ind):
     player2.rect.y = SCREEN_HEIGHT - player2.rect.height
     active_sprite_list.add(player1)
     active_sprite_list.add(player2)
-    done = False
+    playing = True
     clock = pygame.time.Clock()
 
-    while not done:
+    while playing:
         dif = int(((player1.rect.x - player2.rect.x) ** 2 + (player1.rect.y - player2.rect.y) ** 2) ** 0.5)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                done = True
+                playing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     player1.go_left()

@@ -2,7 +2,6 @@ import sys
 import pygame
 from buttons import Button
 from functions import load_image, music
-from roped import *
 
 
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
@@ -31,7 +30,7 @@ class Menu:
         text = font.render('The Roped', True, (100, 100, 120))
         self.screen.blit(text, (200, 50))
         font = pygame.font.SysFont('Arial', 18)
-        text = font.render('Version: 0.2.1 (beta)', True, (0, 0, 0))
+        text = font.render('Version: 0.0.3 (alpha)', True, (0, 0, 0))
         self.screen.blit(text, (4, 477))
 
     def buttons_update(self):
@@ -61,36 +60,22 @@ class LevelMenu(Menu):
      def button_draw(self):
          Button(self.buttons, 'назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
                 function=self.close)
-         Button(self.buttons, '1', 150, 150, (20, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_1)
-         Button(self.buttons, '2', 150, 150, (190, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_2)
-         Button(self.buttons, '3', 150, 150, (360, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_3)
-         Button(self.buttons, '4', 150, 150, (530, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_4)
+         Button(self.buttons, '1', 70, 70, (10, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '2', 70, 70, (90, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '3', 70, 70, (170, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '4', 70, 70, (250, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '5', 70, 70, (330, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '6', 70, 70, (410, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '7', 70, 70, (490, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '8', 70, 70, (570, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '9', 70, 70, (650, 10), 4, pygame.font.SysFont("Arial", 40))
+         Button(self.buttons, '10', 70, 70, (730, 10), 4, pygame.font.SysFont("Arial", 40))
 
      def update(self):
          self.screen.blit(self.image, (0, 0))
 
      def close(self):
          self.m_running = False
-
-     def start_level_1(self):
-         startt(0)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
-
-     def start_level_2(self):
-         startt(1)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
-
-     def start_level_3(self):
-         startt(2)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
-
-     def start_level_4(self):
-         startt(3)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
 
 
 pygame.init()
