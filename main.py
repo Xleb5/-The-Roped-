@@ -3,7 +3,6 @@ import pygame
 from buttons import Button
 from functions import load_image, music
 
-
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
 
 
@@ -57,29 +56,29 @@ class Menu:
 
 
 class LevelMenu(Menu):
-     def button_draw(self):
-         Button(self.buttons, 'назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
-                function=self.close)
-         Button(self.buttons, '1', 70, 70, (10, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '2', 70, 70, (90, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '3', 70, 70, (170, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '4', 70, 70, (250, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '5', 70, 70, (330, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '6', 70, 70, (410, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '7', 70, 70, (490, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '8', 70, 70, (570, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '9', 70, 70, (650, 10), 4, pygame.font.SysFont("Arial", 40))
-         Button(self.buttons, '10', 70, 70, (730, 10), 4, pygame.font.SysFont("Arial", 40))
+    def button_draw(self):
+        Button(self.buttons, 'назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
+               function=self.close)
+        Button(self.buttons, '1', 70, 70, (10, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '2', 70, 70, (90, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '3', 70, 70, (170, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '4', 70, 70, (250, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '5', 70, 70, (330, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '6', 70, 70, (410, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '7', 70, 70, (490, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '8', 70, 70, (570, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '9', 70, 70, (650, 10), 4, pygame.font.SysFont("Arial", 40))
+        Button(self.buttons, '10', 70, 70, (730, 10), 4, pygame.font.SysFont("Arial", 40))
 
-     def update(self):
-         self.screen.blit(self.image, (0, 0))
+    def update(self):
+        self.screen.blit(self.image, (0, 0))
 
-     def close(self):
-         self.m_running = False
+    def close(self):
+        self.m_running = False
 
 
 pygame.init()
-#music()
+# music()
 running = True
 while running:
     for event in pygame.event.get():
