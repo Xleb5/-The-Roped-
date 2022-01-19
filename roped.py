@@ -218,14 +218,14 @@ class Level_4(Level):
             self.platform_list.add(block)
 
 
-def startt():
+def startt(ind):
     pygame.init()
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("The Roped")
 
     level_list = []
-    level_list.append(LEVEL(player1))
+    level_list.append(LEVEVS[ind](player1))
 
     current_level_num = 0
     current_level = level_list[current_level_num]
@@ -296,8 +296,7 @@ def startt():
                                   255 - int(254 * dif / 405) % 256),
                          (x1 + 30, y1 + 50), (x2 + 30, y2 + 50), 7)
         pygame.display.flip()
-    pygame.quit()
+    pygame.display.flip()
 
 
-LEVEL = Level_1
-startt()
+LEVEVS = [Level_1, Level_2, Level_3, Level_4]

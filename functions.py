@@ -19,8 +19,8 @@ def load_image(name, colorkey=None):
     return image
 
 
-def music():
+def music(sound):
     pygame.mixer.init()
-    pygame.mixer.music.load("data/melody/menu.mp3")
+    pygame.mixer.music.load(sound)
     pygame.mixer.music.set_volume(1)
     pygame.mixer.music.play(fade_ms=-1)
