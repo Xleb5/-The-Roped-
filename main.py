@@ -36,8 +36,7 @@ class InputBox:
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
-                    print(self.text)
-                    self.text = ''
+                    self.clean()
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
@@ -76,9 +75,9 @@ class Menu:
         Button(self.buttons, 'выход', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
         Button(self.buttons, 'Log in', 168, 30, (620, 150), 4, pygame.font.SysFont("Arial", 20),
                function=self.log_in)
-        input_box1 = InputBox(620, 60, 60, 26)
-        input_box2 = InputBox(620, 110, 60, 26)
-        self.input_boxes = [input_box1, input_box2]
+        self.input_box1 = InputBox(620, 60, 60, 26)
+        self.input_box2 = InputBox(620, 110, 60, 26)
+        self.input_boxes = [self.input_box1, self.input_box2]
 
     def left(self):
         pass
@@ -111,8 +110,8 @@ class Menu:
             b.update(self.screen)
 
     def log_in(self):
-        for i in self.input_boxes:
-            i.clean()
+        self.input_box1.clean()
+        self.input_box2.clean()
 
     def run(self):
         self.m_running = True
