@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, image):
         super().__init__()
         self.image = image
+        self.coins = 0
         self.rect = self.image.get_rect()
         self.change_x = 0
         self.change_y = 0
@@ -34,6 +35,9 @@ class Player(pygame.sprite.Sprite):
             elif self.change_y < 0:
                 self.rect.top = block.rect.bottom
             self.change_y = 0
+        if pygame.sprite.spritecollide(self, self.level.coins_list, True):
+            self.coins += 1
+            print(self.coins)
 
     def calc_grav(self):
         if self.change_y == 0:
@@ -98,23 +102,21 @@ class Coin(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load('coin.png'), (38, 38))
         self.rect = self.image.get_rect()
 
-    def update(self):
-        if pygame.sprite.collide_rect(self, player1):
-            print(1)
-            del(LEVEL.platform_list[LEVEL.platform_list.index(self)])
-
 
 class Level(object):
     def __init__(self, player):
         self.platform_list = pygame.sprite.Group()
+        self.coins_list = pygame.sprite.Group()
         self.player = player
 
     def update(self):
         self.platform_list.update()
+        self.coins_list.update()
 
     def draw(self, screen):
         screen.blit(bg, (0, 0))
         self.platform_list.draw(screen)
+        self.coins_list.draw(screen)
 
 
 class Level_1(Level):
@@ -142,17 +144,17 @@ class Level_1(Level):
         block.rect.x = 75
         block.rect.y = 75
         block.player = self.player
-        self.platform_list.add(block)
+        self.coins_list.add(block)
 
         # Монеты
         coins = [
-            [520, 750],
+            [520, 250],
         ]
         for coin in coins:
             block = Coin()
             block.rect.x = coin[0]
             block.rect.y = coin[1]
-            self.platform_list.add(block)
+            self.coins_list.add(block)
 
 
 class Level_2(Level):
@@ -225,7 +227,7 @@ def startt(ind):
     pygame.display.set_caption("The Roped")
 
     level_list = []
-    level_list.append(LEVEVS[ind](player1))
+    level_list.append(LEVELS[ind](player1))
 
     current_level_num = 0
     current_level = level_list[current_level_num]
@@ -240,14 +242,14 @@ def startt(ind):
     player2.rect.y = SCREEN_HEIGHT - player2.rect.height
     active_sprite_list.add(player1)
     active_sprite_list.add(player2)
-    done = False
+    done = True
     clock = pygame.time.Clock()
 
-    while not done:
+    while done:
         dif = int(((player1.rect.x - player2.rect.x) ** 2 + (player1.rect.y - player2.rect.y) ** 2) ** 0.5)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                done = True
+                done = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     player1.go_left()
@@ -299,4 +301,6 @@ def startt(ind):
     pygame.display.flip()
 
 
-LEVEVS = [Level_1, Level_2, Level_3, Level_4]
+LEVELS = [Level_1, Level_2, Level_3, Level_4]
+
+startt(0)
