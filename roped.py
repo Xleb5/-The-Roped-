@@ -37,10 +37,8 @@ class Player(pygame.sprite.Sprite):
             self.change_y = 0
         if pygame.sprite.spritecollide(self, self.level.coins_list, True):
             self.coins += 1
-            print(self.coins)
         if pygame.sprite.spritecollide(self, self.level.flag, True):
-            global done
-            done = False
+            end_game()
 
     def calc_grav(self):
         if self.change_y == 0:
@@ -228,8 +226,27 @@ class Level_4(Level):
             self.platform_list.add(block)
 
 
+def end_game():
+    global done, screen
+    done = False
+    screen.fill((100, 100, 100))
+    font = pygame.font.Font(None, 60)
+    text1 = font.render('Нажмите любую клавишу для выхода', True, (100, 255, 100))
+    text2 = font.render(f'+{player1.coins + player2.coins}', True, (100, 255, 100))
+    screen.blit(text1, (110, 200))
+    screen.blit(text2, (450, 275))
+    pygame.display.flip()
+    f = True
+    while f:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                f = False
+            if event.type == pygame.KEYDOWN:
+                f = False
+
+
 def startt(ind):
-    global done
+    global done, screen, player1, player2
     pygame.init()
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
@@ -303,6 +320,9 @@ def startt(ind):
         current_level.draw(screen)
         active_sprite_list.draw(screen)
         clock.tick(60)
+        font = pygame.font.Font(None, 75)
+        text = font.render(str(player1.coins + player2.coins), True, (100, 255, 100))
+        screen.blit(text, (900, 10))
         pygame.draw.line(screen, (int(254 * dif / 405) % 256, 255 - int(254 * dif / 405) % 256,
                                   255 - int(254 * dif / 405) % 256),
                          (x1 + 30, y1 + 50), (x2 + 30, y2 + 50), 7)
