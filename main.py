@@ -69,11 +69,11 @@ class Menu:
         self.button_draw()
 
     def button_draw(self):
-        Button(self.buttons, 'старт', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
+        Button(self.buttons, 'Старт', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
         Button(self.buttons, '<', 40, 40, (20, 240), 4, self.gui_font, function=self.left)
-        Button(self.buttons, 'buy', 170, 40, (60, 390), 4, self.gui_font)
+        Button(self.buttons, 'Buy', 170, 40, (60, 390), 4, self.gui_font)
         Button(self.buttons, '>', 40, 40, (230, 240), 4, self.gui_font, function=self.right)
-        Button(self.buttons, 'выход', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
+        Button(self.buttons, 'Выход', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
         Button(self.buttons, 'Log in', 168, 30, (620, 150), 4, pygame.font.SysFont("Arial", 20),
                function=self.log_in)
         self.input_box1 = InputBox(620, 60, 60, 26)
@@ -95,7 +95,7 @@ class Menu:
         text = font.render('Version: 0.2.1 (beta)', True, (0, 0, 0))
         self.screen.blit(text, (4, 477))
         font = pygame.font.SysFont('Arial', 18)
-        text = font.render('Войти в профиль, или создать новый', True, (0, 0, 0))
+        text = font.render('''Войти в профиль, или создать новый''', True, (0, 0, 0))
         self.screen.blit(text, (530, 9))
         text = font.render('Login:', True, (0, 0, 0))
         self.screen.blit(text, (620, 35))
@@ -138,7 +138,7 @@ class Menu:
 
 class LevelMenu(Menu):
      def button_draw(self):
-         Button(self.buttons, 'назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
+         Button(self.buttons, 'Назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
                 function=self.close)
          Button(self.buttons, '1', 150, 150, (40, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_1)
          Button(self.buttons, '2', 150, 150, (230, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_2)

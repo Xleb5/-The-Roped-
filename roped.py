@@ -38,6 +38,9 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, self.level.coins_list, True):
             self.coins += 1
             print(self.coins)
+        if pygame.sprite.spritecollide(self, self.level.flag, True):
+            global done
+            done = False
 
     def calc_grav(self):
         if self.change_y == 0:
@@ -107,6 +110,7 @@ class Level(object):
     def __init__(self, player):
         self.platform_list = pygame.sprite.Group()
         self.coins_list = pygame.sprite.Group()
+        self.flag = pygame.sprite.Group()
         self.player = player
 
     def update(self):
@@ -117,6 +121,7 @@ class Level(object):
         screen.blit(bg, (0, 0))
         self.platform_list.draw(screen)
         self.coins_list.draw(screen)
+        self.flag.draw(screen)
 
 
 class Level_1(Level):
@@ -144,13 +149,14 @@ class Level_1(Level):
         block.rect.x = 75
         block.rect.y = 75
         block.player = self.player
-        self.coins_list.add(block)
+        self.flag.add(block)
 
         # Монеты
         coins = [
             [520, 250],
-            [420, 270],
-            [320, 260],
+            [420, 250],
+            [320, 250],
+            [650, 125],
         ]
         for coin in coins:
             block = Coin()
@@ -223,6 +229,7 @@ class Level_4(Level):
 
 
 def startt(ind):
+    global done
     pygame.init()
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
