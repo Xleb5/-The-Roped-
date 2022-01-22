@@ -2,8 +2,9 @@ import pygame
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
-# Перед вызовом функции старт LEVEL необходимо задать как класс Level_X()
 LEVEL = None
+SKIN1 = 'data/skins/idle.png'
+SKIN2 = 'data/skins/idle.png'
 bg = pygame.transform.scale(pygame.image.load('bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -78,8 +79,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
-player1 = Player(pygame.image.load('data/skins/idle.png'))
-player2 = Player(pygame.image.load('data/skins/idle.png'))
+player1 = Player(pygame.image.load(SKIN))
+player2 = Player(pygame.image.load(SKIN))
 
 
 # Класс платформы
