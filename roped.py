@@ -149,6 +149,8 @@ class Level_1(Level):
         # Монеты
         coins = [
             [520, 250],
+            [420, 270],
+            [320, 260],
         ]
         for coin in coins:
             block = Coin()
