@@ -78,8 +78,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
-player1 = Player(pygame.image.load('idle.png'))
-player2 = Player(pygame.image.load('idle.png'))
+player1 = Player(pygame.image.load('data/skins/idle.png'))
+player2 = Player(pygame.image.load('data/skins/idle.png'))
 
 
 # Класс платформы
