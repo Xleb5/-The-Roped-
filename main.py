@@ -1,7 +1,7 @@
 import sys
 import pygame
 from buttons import Button
-from functions import load_image, music
+from functions import load_image, music, profiles, update_csv_cell
 from roped import *
 pygame.init()
 
@@ -21,7 +21,8 @@ class InputBox:
         self.active = False
 
     def clean(self):
-        self.text += '123231'
+        self.text = ''
+        self.txt_surface = FONT.render(self.text, True, self.color)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -110,6 +111,8 @@ class Menu:
             b.update(self.screen)
 
     def log_in(self):
+        a = profiles(self.input_box1.text, self.input_box2.text)
+        print(a)
         self.input_box1.clean()
         self.input_box2.clean()
 

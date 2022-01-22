@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import csv
 
 
 def load_image(name, colorkey=None):
@@ -19,8 +20,42 @@ def load_image(name, colorkey=None):
     return image
 
 
+def update_csv_cell(address, new_value):
+
+    row_num, col_num = address
+
+    with open('data/profiles.csv',  encoding="utf8") as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        lines = []
+        for current_line in reader:
+            if reader.line_num == row_num + 1:
+                current_line[col_num] = new_value
+            lines.append(current_line)
+    with open('data/profiles.csv', 'w', newline='') as csvfile:
+        csvfile.truncate()
+        writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for i in lines:
+           writer.writerow(i)
+
+
 def music(sound):
     pygame.mixer.init()
     pygame.mixer.music.load(sound)
     pygame.mixer.music.set_volume(1)
     pygame.mixer.music.play(fade_ms=-1)
+
+
+def profiles(login, password):
+    with open('data/profiles.csv', encoding="utf8") as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        for row in reader:
+            if row[0] == login and row[1] == password:
+                return row
+    with open('data/profiles.csv',  encoding="utf8") as csvfile:
+        reader = list(csv.reader(csvfile, delimiter=';'))
+    reader.append([login, password, '0', '1'])
+    with open('data/profiles.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';', quotechar='"')
+        for i in reader:
+            writer.writerow(i)
+        return [login, password, '0', '1']
