@@ -261,22 +261,46 @@ class Level_3(Level):
 class Level_4(Level):
     def __init__(self, player):
         Level.__init__(self, player)
+        player1.rect.x = 50
+        player1.rect.y = 300
+        player2.rect.x = 50
+        player2.rect.y = 300
 
-        level = [
-            [520, 470],
-            [200, 600],
-            [400, 600],
-            [520, 650],
-            [600, 700],
-            [660, 770],
+        # Платформы
+        platforms = [
+            [630, 350],
+            [500, 225],
+            [350, 225],
+            [280, 225],
+            [370, 150],
+            [700, 470],
         ]
-
-        for platform in level:
+        for platform in platforms:
             block = Platform()
             block.rect.x = platform[0]
             block.rect.y = platform[1]
             block.player = self.player
             self.platform_list.add(block)
+
+        # Finish
+        block = Flag()
+        block.rect.x = 250
+        block.rect.y = 275
+        block.player = self.player
+        self.flag.add(block)
+
+        # Монеты
+        coins = [
+            [650, 125],
+            [650, 430],
+            [550, 430],
+            [650, 380],
+        ]
+        for coin in coins:
+            block = Coin()
+            block.rect.x = coin[0]
+            block.rect.y = coin[1]
+            self.coins_list.add(block)
 
 
 def end_game():
