@@ -21,9 +21,7 @@ def load_image(name, colorkey=None):
 
 
 def update_csv_cell(address, new_value):
-
     row_num, col_num = address
-
     with open('data/profiles.csv',  encoding="utf8") as csvfile:
         reader = csv.reader(csvfile, delimiter=';')
         lines = []
@@ -48,14 +46,15 @@ def music(sound):
 def profiles(login, password):
     with open('data/profiles.csv', encoding="utf8") as csvfile:
         reader = csv.reader(csvfile, delimiter=';')
-        for row in reader:
+        for ind, row in enumerate(reader):
             if row[0] == login and row[1] == password:
-                return row
+                return ind, row
+    a = ind + 1
     with open('data/profiles.csv',  encoding="utf8") as csvfile:
         reader = list(csv.reader(csvfile, delimiter=';'))
-    reader.append([login, password, '0', '1'])
+    reader.append([login, password, '0', 'idle '])
     with open('data/profiles.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=';', quotechar='"')
         for i in reader:
             writer.writerow(i)
-        return [login, password, '0', '1']
+        return a, [login, password, '0', 'idle ']

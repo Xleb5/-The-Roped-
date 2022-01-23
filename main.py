@@ -1,5 +1,4 @@
 import sys
-import pygame
 from buttons import Button
 from functions import load_image, music, profiles, update_csv_cell
 from roped import *
@@ -72,11 +71,11 @@ class Menu:
         self.button_draw()
 
     def button_draw(self):
-        Button(self.buttons, 'Старт', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
+        Button(self.buttons, 'Start', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
         Button(self.buttons, '<', 40, 40, (20, 240), 4, self.gui_font, function=self.left)
         self.buy = Button(self.buttons, 'Bought', 170, 40, (60, 390), 4, self.gui_font, function=self.buy_scin)
         Button(self.buttons, '>', 40, 40, (230, 240), 4, self.gui_font, function=self.right)
-        Button(self.buttons, 'Выход', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
+        Button(self.buttons, 'Exit', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
         Button(self.buttons, 'Log in', 168, 30, (620, 150), 4, pygame.font.SysFont("Arial", 20),
                function=self.log_in)
         self.input_box1 = InputBox(620, 60, 60, 26)
@@ -86,21 +85,19 @@ class Menu:
 
     def buy_scin(self):
         if PROFILE:
-            if not (SKIN in PROFILE[3]):
-                if int(PROFILE[2]) >= 10:
-
-                    PROFILE[2] = str(int(PROFILE[2]) - 10)
-                    PROFILE[3] = PROFILE[3] + f' {SKIN}'
+            if not (SKIN in PROFILE[1][3]):
+                if int(PROFILE[1][2]) >= 10:
+                    PROFILE[1][2] = str(int(PROFILE[1][2]) - 10)
+                    PROFILE[1][3] = PROFILE[1][3] + f' {SKIN}'
                     self.buy.text = 'bought'
-
-                    print(PROFILE)
+                    update_csv_cell((PROFILE[0], 3), PROFILE[1][3])
 
     def left(self):
         if PROFILE:
             self.skin_ind -= 1
             global SKIN
             SKIN = SKINS_LIST[self.skin_ind % 4]
-            if SKIN in PROFILE[3]:
+            if SKIN in PROFILE[1][3]:
                 self.buy.text = 'bought'
             else:
                 self.buy.text = 'Buy for 10'
@@ -110,7 +107,7 @@ class Menu:
             self.skin_ind += 1
             global SKIN
             SKIN = SKINS_LIST[self.skin_ind % 4]
-            if SKIN in PROFILE[3]:
+            if SKIN in PROFILE[1][3]:
                 self.buy.text = 'Bought'
             else:
                 self.buy.text = 'Buy for 10'
@@ -121,7 +118,7 @@ class Menu:
         text = font.render('The Roped', True, (100, 100, 120))
         self.screen.blit(text, (240, 50))
         font = pygame.font.SysFont('Arial', 18)
-        text = font.render('Version: 0.3.0 (beta)', True, (0, 0, 0))
+        text = font.render('Version: 1.2.0 (realize)', True, (0, 0, 0))
         self.screen.blit(text, (4, 477))
         font = pygame.font.SysFont('Arial', 18)
         text = font.render('''Войти в профиль, или создать новый''', True, (0, 0, 0))
@@ -134,7 +131,7 @@ class Menu:
         self.screen.blit(self.c_image, (20, 20))
         if PROFILE:
             font = pygame.font.SysFont('Arial', 45)
-            text = font.render(PROFILE[2], True, (100, 100, 120))
+            text = font.render(PROFILE[1][2], True, (100, 100, 120))
             self.screen.blit(text, (87, 24))
 
         for box in self.input_boxes:
@@ -152,7 +149,6 @@ class Menu:
 
     def log_in(self):
         a = profiles(self.input_box1.text, self.input_box2.text)
-        print(a)
         self.input_box1.clean()
         self.input_box2.clean()
         global PROFILE
@@ -175,7 +171,7 @@ class Menu:
 
     def start(self):
         global SKIN
-        if PROFILE and not (SKIN in PROFILE[3]):
+        if PROFILE and not (SKIN in PROFILE[1][3]):
             SKIN = 'idle'
         lev_menu = LevelMenu()
         lev_menu.run()
@@ -203,7 +199,9 @@ class LevelMenu(Menu):
     def mn_f(self):
         if PROFILE:
             from roped import MONEY
-            PROFILE[2] = str(int(PROFILE[2]) + MONEY)
+            PROFILE[1][2] = str(int(PROFILE[1][2]) + MONEY)
+            mmm()
+            update_csv_cell((PROFILE[0], 2), PROFILE[1][2])
 
     def start_level_1(self):
 
