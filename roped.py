@@ -125,6 +125,10 @@ class Level(object):
 class Level_1(Level):
     def __init__(self, player):
         Level.__init__(self, player)
+        player1.rect.x = 340
+        player1.rect.y = SCREEN_HEIGHT - player1.rect.height
+        player2.rect.x = 340
+        player2.rect.y = SCREEN_HEIGHT - player2.rect.height
 
         # Платформы
         platforms = [
@@ -166,43 +170,93 @@ class Level_1(Level):
 class Level_2(Level):
     def __init__(self, player):
         Level.__init__(self, player)
+        player1.rect.x = 50
+        player1.rect.y = 300
+        player2.rect.x = 50
+        player2.rect.y = 300
 
-        level = [
-            [520, 470],
-            [200, 600],
-            [400, 600],
-            [520, 650],
-            [600, 700],
-            [660, 770],
+        # Платформы
+        platforms = [
+            [540, 200],
+            [200, 520],
+            [240, 100],
+            [480, 320],
+            [450, 400],
+            [540, 470],
         ]
-
-        for platform in level:
+        for platform in platforms:
             block = Platform()
             block.rect.x = platform[0]
             block.rect.y = platform[1]
             block.player = self.player
             self.platform_list.add(block)
+
+        # Finish
+        block = Flag()
+        block.rect.x = 875
+        block.rect.y = 90
+        block.player = self.player
+        self.flag.add(block)
+
+        # Монеты
+        coins = [
+            [470, 50],
+            [350, 50],
+            [270, 50],
+            [650, 125],
+            [650, 430],
+        ]
+        for coin in coins:
+            block = Coin()
+            block.rect.x = coin[0]
+            block.rect.y = coin[1]
+            self.coins_list.add(block)
 
 
 class Level_3(Level):
     def __init__(self, player):
         Level.__init__(self, player)
+        player1.rect.x = 50
+        player1.rect.y = 300
+        player2.rect.x = 50
+        player2.rect.y = 300
 
-        level = [
-            [520, 470],
-            [200, 600],
-            [400, 600],
-            [520, 650],
-            [600, 700],
-            [660, 770],
+        # Платформы
+        platforms = [
+            [540, 200],
+            [200, 520],
+            [240, 100],
+            [480, 320],
+            [450, 400],
+            [540, 470],
         ]
-
-        for platform in level:
+        for platform in platforms:
             block = Platform()
             block.rect.x = platform[0]
             block.rect.y = platform[1]
             block.player = self.player
             self.platform_list.add(block)
+
+        # Finish
+        block = Flag()
+        block.rect.x = 875
+        block.rect.y = 90
+        block.player = self.player
+        self.flag.add(block)
+
+        # Монеты
+        coins = [
+            [470, 50],
+            [350, 50],
+            [270, 50],
+            [650, 125],
+            [650, 430],
+        ]
+        for coin in coins:
+            block = Coin()
+            block.rect.x = coin[0]
+            block.rect.y = coin[1]
+            self.coins_list.add(block)
 
 
 class Level_4(Level):
@@ -262,10 +316,6 @@ def startt(ind):
     player1.level = current_level
     player2.level = current_level
 
-    player1.rect.x = 340
-    player1.rect.y = SCREEN_HEIGHT - player1.rect.height
-    player2.rect.x = 340
-    player2.rect.y = SCREEN_HEIGHT - player2.rect.height
     active_sprite_list.add(player1)
     active_sprite_list.add(player2)
     done = True
@@ -331,3 +381,4 @@ def startt(ind):
 
 
 LEVELS = [Level_1, Level_2, Level_3, Level_4]
+startt(1)
