@@ -4,7 +4,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
 SKIN = 'guy'
-bg = pygame.transform.scale(pygame.image.load('bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+bg = pygame.transform.scale(pygame.image.load('data/bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 class Player(pygame.sprite.Sprite):
@@ -86,21 +86,21 @@ player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.pn
 class Platform(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('platform.png')
+        self.image = pygame.image.load('data/platform.png')
         self.rect = self.image.get_rect()
 
 
 class Flag(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('flag.png'), (63, 74))
+        self.image = pygame.transform.scale(pygame.image.load('data/flag.png'), (63, 74))
         self.rect = self.image.get_rect()
 
 
 class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('coin.png'), (38, 38))
+        self.image = pygame.transform.scale(pygame.image.load('data/coin.png'), (38, 38))
         self.rect = self.image.get_rect()
 
 
