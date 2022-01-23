@@ -79,10 +79,6 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
-player1 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
-player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
-
-
 # Класс платформы
 class Platform(pygame.sprite.Sprite):
     def __init__(self):
@@ -332,6 +328,8 @@ def startt(ind):
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("The Roped")
+    player1 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
+    player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
 
     level_list = []
     level_list.append(LEVELS[ind](player1))
