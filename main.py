@@ -9,6 +9,7 @@ WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
 COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
 FONT = pygame.font.SysFont('Arial', 27)
+SKINS_LIST = ('bunny', 'guy', 'idle', 'mario')
 
 
 class InputBox:
@@ -79,12 +80,14 @@ class Menu:
         self.input_box1 = InputBox(620, 60, 60, 26)
         self.input_box2 = InputBox(620, 110, 60, 26)
         self.input_boxes = [self.input_box1, self.input_box2]
+        self.skin_ind = 2
+
 
     def left(self):
-        pass
+        self.skin_ind -= 1
 
     def right(self):
-        pass
+        self.skin_ind += 1
 
     def update(self):
         self.screen.blit(self.image, (0, 0))
@@ -105,6 +108,8 @@ class Menu:
             box.update()
         for box in self.input_boxes:
             box.draw(self.screen)
+        self.skin = pygame.transform.scale(pygame.image.load(f'data/skins/{SKINS_LIST[self.skin_ind % 4]}.png'), (60, 75))
+        self.screen.blit(self.skin, (120, 220))
 
     def buttons_update(self):
         for b in self.buttons:
@@ -173,7 +178,6 @@ class LevelMenu(Menu):
          pygame.display.flip()
 
 
-pygame.init()
 #music()
 running = True
 while running:

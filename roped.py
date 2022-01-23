@@ -4,6 +4,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
 SKIN = 'guy'
+MONEY = 0
 bg = pygame.transform.scale(pygame.image.load('data/bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -281,12 +282,16 @@ class Level_4(Level):
 
 
 def end_game():
-    global done, screen
+    global done, screen, MONEY
     done = False
     screen.fill((100, 100, 100))
     font = pygame.font.Font(None, 60)
     text1 = font.render('Нажмите любую клавишу для выхода', True, (100, 255, 100))
     text2 = font.render(f'+{player1.coins + player2.coins}', True, (100, 255, 100))
+    MONEY += player1.coins
+    MONEY += player2.coins
+    player1.coins = 0
+    player2.coins = 0
     screen.blit(text1, (110, 200))
     screen.blit(text2, (450, 275))
     pygame.display.flip()
@@ -381,4 +386,3 @@ def startt(ind):
 
 
 LEVELS = [Level_1, Level_2, Level_3, Level_4]
-startt(1)
