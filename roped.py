@@ -3,8 +3,7 @@ import pygame
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
-SKIN1 = 'data/skins/idle.png'
-SKIN2 = 'data/skins/idle.png'
+SKIN = 'guy'
 bg = pygame.transform.scale(pygame.image.load('bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -79,8 +78,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
-player1 = Player(pygame.image.load(SKIN))
-player2 = Player(pygame.image.load(SKIN))
+player1 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
+player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
 
 
 # Класс платформы
