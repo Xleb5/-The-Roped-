@@ -3,7 +3,7 @@ import pygame
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
-SKIN = 'guy'
+SKIN = 'idle'
 MONEY = 0
 bg = pygame.transform.scale(pygame.image.load('data/bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -79,8 +79,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False)
 
 
-player1 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
-player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{SKIN}.png'), (60, 75)))
+
 
 
 # Класс платформы
@@ -304,8 +303,10 @@ def end_game():
                 f = False
 
 
-def startt(ind):
+def startt(skin, ind):
     global done, screen, player1, player2
+    player1 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{skin}.png'), (60, 75)))
+    player2 = Player(pygame.transform.scale(pygame.image.load(f'data/skins/{skin}.png'), (60, 75)))
     pygame.init()
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)

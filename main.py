@@ -3,6 +3,7 @@ import pygame
 from buttons import Button
 from functions import load_image, music, profiles, update_csv_cell
 from roped import *
+
 pygame.init()
 
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
@@ -10,6 +11,7 @@ COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
 FONT = pygame.font.SysFont('Arial', 27)
 SKINS_LIST = ('bunny', 'guy', 'idle', 'mario')
+PROFILE = False
 
 
 class InputBox:
@@ -54,7 +56,7 @@ class InputBox:
 
     def draw(self, screen):
         # Blit the text.
-        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y - 3))
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y - 3))
         # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
@@ -72,7 +74,7 @@ class Menu:
     def button_draw(self):
         Button(self.buttons, 'Старт', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
         Button(self.buttons, '<', 40, 40, (20, 240), 4, self.gui_font, function=self.left)
-        Button(self.buttons, 'Buy', 170, 40, (60, 390), 4, self.gui_font)
+        self.buy = Button(self.buttons, 'Bought', 170, 40, (60, 390), 4, self.gui_font, function=self.buy_scin)
         Button(self.buttons, '>', 40, 40, (230, 240), 4, self.gui_font, function=self.right)
         Button(self.buttons, 'Выход', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
         Button(self.buttons, 'Log in', 168, 30, (620, 150), 4, pygame.font.SysFont("Arial", 20),
@@ -82,12 +84,30 @@ class Menu:
         self.input_boxes = [self.input_box1, self.input_box2]
         self.skin_ind = 2
 
+    def buy_scin(self):
+        if PROFILE:
+            if not (SKIN in PROFILE[3]):
+                pass
 
     def left(self):
-        self.skin_ind -= 1
+        if PROFILE:
+            self.skin_ind -= 1
+            global SKIN
+            SKIN = SKINS_LIST[self.skin_ind % 4]
+            if SKIN in PROFILE[3]:
+                self.buy.text = 'bought'
+            else:
+                self.buy.text = 'Buy for 10'
 
     def right(self):
-        self.skin_ind += 1
+        if PROFILE:
+            self.skin_ind += 1
+            global SKIN
+            SKIN = SKINS_LIST[self.skin_ind % 4]
+            if SKIN in PROFILE[3]:
+                self.buy.text = 'Bought'
+            else:
+                self.buy.text = 'Buy for 10'
 
     def update(self):
         self.screen.blit(self.image, (0, 0))
@@ -104,12 +124,21 @@ class Menu:
         self.screen.blit(text, (620, 35))
         text = font.render('Password', True, (0, 0, 0))
         self.screen.blit(text, (620, 87))
+        self.c_image = pygame.transform.scale(pygame.image.load('data/coin.png'), (60, 60))
+        self.screen.blit(self.c_image, (20, 20))
+        if PROFILE:
+            font = pygame.font.SysFont('Arial', 45)
+            text = font.render(PROFILE[2], True, (100, 100, 120))
+            self.screen.blit(text, (87, 24))
+
         for box in self.input_boxes:
             box.update()
         for box in self.input_boxes:
             box.draw(self.screen)
-        self.skin = pygame.transform.scale(pygame.image.load(f'data/skins/{SKINS_LIST[self.skin_ind % 4]}.png'), (60, 75))
+        self.skin = pygame.transform.scale(pygame.image.load(f'data/skins/{SKINS_LIST[self.skin_ind % 4]}.png'),
+                                           (60, 75))
         self.screen.blit(self.skin, (120, 220))
+        self.buy.change_text(self.buy.text)
 
     def buttons_update(self):
         for b in self.buttons:
@@ -120,6 +149,8 @@ class Menu:
         print(a)
         self.input_box1.clean()
         self.input_box2.clean()
+        global PROFILE
+        PROFILE = a
 
     def run(self):
         self.m_running = True
@@ -137,48 +168,55 @@ class Menu:
             self.clock.tick(60)
 
     def start(self):
+        global SKIN
+        if PROFILE and not (SKIN in PROFILE[3]):
+            SKIN = 'idle'
         lev_menu = LevelMenu()
         lev_menu.run()
 
 
 class LevelMenu(Menu):
-     def button_draw(self):
-         Button(self.buttons, 'Назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
-                function=self.close)
-         Button(self.buttons, '1', 150, 150, (40, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_1)
-         Button(self.buttons, '2', 150, 150, (230, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_2)
-         Button(self.buttons, '3', 150, 150, (420, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_3)
-         Button(self.buttons, '4', 150, 150, (610, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_4)
-         self.input_boxes = False
+    def button_draw(self):
+        Button(self.buttons, 'Назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
+               function=self.close)
+        Button(self.buttons, '1', 150, 150, (40, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_1)
+        Button(self.buttons, '2', 150, 150, (230, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_2)
+        Button(self.buttons, '3', 150, 150, (420, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_3)
+        Button(self.buttons, '4', 150, 150, (610, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_4)
+        self.input_boxes = False
 
-     def update(self):
-         self.screen.blit(self.image, (0, 0))
+    def update(self):
+        self.screen.blit(self.image, (0, 0))
 
-     def close(self):
-         self.m_running = False
+    def close(self):
+        self.m_running = False
 
-     def start_level_1(self):
-         startt(0)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
+    def start_level_1(self):
+        global MONEY
+        startt(SKIN, 0)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.flip()
 
-     def start_level_2(self):
-         startt(1)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
+    def start_level_2(self):
+        startt(SKIN, 1)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.flip()
 
-     def start_level_3(self):
-         startt(2)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
+    def start_level_3(self):
+        startt(SKIN, 2)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.flip()
 
-     def start_level_4(self):
-         startt(3)
-         self.screen = pygame.display.set_mode(WINDOW_SIZE)
-         pygame.display.flip()
+    def start_level_4(self):
+        startt(SKIN, 3)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.flip()
 
 
-#music()
+music('data/melody/menu.mp3')
 running = True
 while running:
     for event in pygame.event.get():
