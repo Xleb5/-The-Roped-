@@ -41,7 +41,7 @@ def update_csv_cell(address, new_value):
 def music(sound):
     pygame.mixer.init()
     pygame.mixer.music.load(sound)
-    pygame.mixer.music.set_volume(0.01)
+    pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(fade_ms=-1)
 
 
