@@ -87,7 +87,13 @@ class Menu:
     def buy_scin(self):
         if PROFILE:
             if not (SKIN in PROFILE[3]):
-                pass
+                if int(PROFILE[2]) >= 10:
+
+                    PROFILE[2] = str(int(PROFILE[2]) - 10)
+                    PROFILE[3] = PROFILE[3] + f' {SKIN}'
+                    self.buy.text = 'bought'
+
+                    print(PROFILE)
 
     def left(self):
         if PROFILE:
@@ -194,25 +200,34 @@ class LevelMenu(Menu):
     def close(self):
         self.m_running = False
 
+    def mn_f(self):
+        if PROFILE:
+            from roped import MONEY
+            PROFILE[2] = str(int(PROFILE[2]) + MONEY)
+
     def start_level_1(self):
-        global MONEY
-        startt(SKIN, 0)
+
+        a = startt(SKIN, 0)
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
         pygame.display.flip()
 
     def start_level_2(self):
         startt(SKIN, 1)
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
         pygame.display.flip()
 
     def start_level_3(self):
         startt(SKIN, 2)
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
         pygame.display.flip()
 
     def start_level_4(self):
         startt(SKIN, 3)
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
         pygame.display.flip()
 
 

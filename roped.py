@@ -4,7 +4,6 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
 SKIN = 'idle'
-MONEY = 0
 bg = pygame.transform.scale(pygame.image.load('data/bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -308,6 +307,7 @@ def end_game():
     text2 = font.render(f'+{player1.coins + player2.coins}', True, (100, 255, 100))
     MONEY += player1.coins
     MONEY += player2.coins
+    print(MONEY)
     player1.coins = 0
     player2.coins = 0
     screen.blit(text1, (110, 200))
@@ -404,5 +404,5 @@ def startt(skin, ind):
         pygame.display.flip()
     pygame.display.flip()
 
-
+MONEY = 0
 LEVELS = [Level_1, Level_2, Level_3, Level_4]
