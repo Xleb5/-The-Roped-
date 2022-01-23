@@ -3,7 +3,7 @@ import pygame
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 LEVEL = None
-SKIN = 'guy'
+SKIN = 'idle'
 MONEY = 0
 bg = pygame.transform.scale(pygame.image.load('data/bg.jpg'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -224,12 +224,10 @@ class Level_3(Level):
 
         # Платформы
         platforms = [
-            [540, 200],
-            [200, 520],
-            [240, 100],
-            [480, 320],
-            [450, 400],
-            [540, 470],
+            [630, 350],
+            [500, 225],
+            [370, 150],
+            [700, 470],
         ]
         for platform in platforms:
             block = Platform()
@@ -240,8 +238,8 @@ class Level_3(Level):
 
         # Finish
         block = Flag()
-        block.rect.x = 875
-        block.rect.y = 90
+        block.rect.x = 600
+        block.rect.y = 275
         block.player = self.player
         self.flag.add(block)
 
