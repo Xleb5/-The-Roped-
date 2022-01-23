@@ -175,6 +175,7 @@ class Menu:
             SKIN = 'idle'
         lev_menu = LevelMenu()
         lev_menu.run()
+        SKIN = SKINS_LIST[self.skin_ind % 4]
 
 
 class LevelMenu(Menu):
@@ -204,8 +205,7 @@ class LevelMenu(Menu):
             update_csv_cell((PROFILE[0], 2), PROFILE[1][2])
 
     def start_level_1(self):
-
-        a = startt(SKIN, 0)
+        startt(SKIN, 0)
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
         self.mn_f()
         pygame.display.flip()
