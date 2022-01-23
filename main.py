@@ -88,7 +88,7 @@ class Menu:
 
     def update(self):
         self.screen.blit(self.image, (0, 0))
-        font = pygame.font.SysFont('Arial', 100)
+        font = pygame.font.SysFont('Arial', 80)
         text = font.render('The Roped', True, (100, 100, 120))
         self.screen.blit(text, (200, 50))
         font = pygame.font.SysFont('Arial', 18)
@@ -96,7 +96,7 @@ class Menu:
         self.screen.blit(text, (4, 477))
         font = pygame.font.SysFont('Arial', 18)
         text = font.render('''Войти в профиль, или создать новый''', True, (0, 0, 0))
-        self.screen.blit(text, (530, 9))
+        self.screen.blit(text, (480, 9))
         text = font.render('Login:', True, (0, 0, 0))
         self.screen.blit(text, (620, 35))
         text = font.render('Password', True, (0, 0, 0))
