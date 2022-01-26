@@ -1,172 +1,242 @@
-import os
 import sys
-import pygame
+from buttons import Button
+from functions import load_image, music, profiles, update_csv_cell
+from roped import *
+
+pygame.init()
 
 WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT = 800, 500
-FPS = 60
+COLOR_INACTIVE = pygame.Color('lightskyblue3')
+COLOR_ACTIVE = pygame.Color('dodgerblue2')
+FONT = pygame.font.SysFont('Arial', 27)
+SKINS_LIST = ('bunny', 'guy', 'idle', 'mario')
+PROFILE = False
 
 
-class Button(pygame.sprite.Sprite):
-    def __init__(self, position, text, size,
-                 colors="white on blue",
-                 hover_colors="red on green",
-                 style=2, borderc=(255, 255, 255),
-                 command=lambda: print("No command activated for this button")):
-        super().__init__()
+class InputBox:
+
+    def __init__(self, x, y, w, h, text=''):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.color = COLOR_INACTIVE
         self.text = text
-        self.command = command
-        self.colors = colors
-        self.original_colors = colors
-        self.fg, self.bg = self.colors.split(" on ")
-        if hover_colors == "red on green":
-            self.hover_colors = f"{self.bg} on {self.fg}"
-        else:
-            self.hover_colors = hover_colors
-        self.style = style
-        self.borderc = borderc
-        self.font = pygame.font.SysFont("Arial", size)
-        self.render()
-        self.x, self.y, self.w, self.h = self.text_render.get_rect()
-        self.x, self.y = position
-        self.rect = pygame.Rect((self.x, self.y), (self.w, self.h))
-        self.position = position
-        self.pressed = 1
-        buttons.add(self)
+        self.txt_surface = FONT.render(text, True, self.color)
+        self.active = False
 
-    def render(self):
-        self.text_render = self.font.render(self.text, True, self.fg)
-        self.image = self.text_render
+    def clean(self):
+        self.text = ''
+        self.txt_surface = FONT.render(self.text, True, self.color)
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # If the user clicked on the input_box rect.
+            if self.rect.collidepoint(event.pos):
+                # Toggle the active variable.
+                self.active = not self.active
+            else:
+                self.active = False
+            # Change the current color of the input box.
+            self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:
+                    self.clean()
+                elif event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    if self.txt_surface.get_width() <= 150:
+                        self.text += event.unicode
+                # Re-render the text.
+                self.txt_surface = FONT.render(self.text, True, self.color)
 
     def update(self):
-        self.fg, self.bg = self.colors.split(" on ")
-        if self.style == 1:
-            self.draw_button()
-        elif self.style == 2:
-            self.draw_button_fone()
-        self.hover()
-        self.click()
+        # Resize the box if the text is too long.
+        width = 167
+        self.rect.w = width
 
-    def draw_button(self):
-        pygame.draw.line(screen, (150, 150, 150), (self.x, self.y), (self.x + self.w, self.y), 5)
-        pygame.draw.line(screen, (150, 150, 150), (self.x, self.y - 2), (self.x, self.y + self.h), 5)
-        pygame.draw.line(screen, (50, 50, 50), (self.x, self.y + self.h), (self.x + self.w, self.y + self.h), 5)
-        pygame.draw.line(screen, (50, 50, 50), (self.x + self.w, self.y + self.h), [self.x + self.w, self.y], 5)
-        pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h))
-
-    def draw_button_fone(self):
-        pygame.draw.rect(screen, self.bg, (self.x, self.y, self.w, self.h), 0, 13)
-
-    def hover(self):
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            self.colors = self.hover_colors
-        else:
-            self.colors = self.original_colors
-        self.render()
-
-    def click(self):
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            if pygame.mouse.get_pressed()[0] and self.pressed == 1:
-                print("Execunting code for button '" + self.text + "'")
-                self.command()
-                self.pressed = 0
-            if pygame.mouse.get_pressed() == (0, 0, 0):
-                self.pressed = 1
+    def draw(self, screen):
+        # Blit the text.
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y - 3))
+        # Blit the rect.
+        pygame.draw.rect(screen, self.color, self.rect, 2)
 
 
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image
+class Menu:
+    def __init__(self):
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        pygame.display.set_caption('The Roped')
+        self.clock = pygame.time.Clock()
+        self.gui_font = pygame.font.SysFont("Arial", 30)
+        self.buttons = []
+        self.image = load_image("fon.jpg")
+        self.button_draw()
+
+    def button_draw(self):
+        Button(self.buttons, 'Start', 200, 60, (300, 220), 4, self.gui_font, function=self.start)
+        Button(self.buttons, '<', 40, 40, (20, 240), 4, self.gui_font, function=self.left)
+        self.buy = Button(self.buttons, 'Bought', 170, 40, (60, 390), 4, self.gui_font, function=self.buy_scin)
+        Button(self.buttons, '>', 40, 40, (230, 240), 4, self.gui_font, function=self.right)
+        Button(self.buttons, 'Exit', 200, 60, (300, 300), 4, self.gui_font, function=lambda: sys.exit())
+        Button(self.buttons, 'Log in', 168, 30, (620, 150), 4, pygame.font.SysFont("Arial", 20),
+               function=self.log_in)
+        self.input_box1 = InputBox(620, 60, 60, 26)
+        self.input_box2 = InputBox(620, 110, 60, 26)
+        self.input_boxes = [self.input_box1, self.input_box2]
+        self.skin_ind = 2
+
+    def buy_scin(self):
+        if PROFILE:
+            if not (SKIN in PROFILE[1][3]):
+                if int(PROFILE[1][2]) >= 10:
+                    PROFILE[1][2] = str(int(PROFILE[1][2]) - 10)
+                    PROFILE[1][3] = PROFILE[1][3] + f' {SKIN}'
+                    self.buy.text = 'bought'
+                    update_csv_cell((PROFILE[0], 3), PROFILE[1][3])
+
+    def left(self):
+        if PROFILE:
+            self.skin_ind -= 1
+            global SKIN
+            SKIN = SKINS_LIST[self.skin_ind % 4]
+            if SKIN in PROFILE[1][3]:
+                self.buy.text = 'bought'
+            else:
+                self.buy.text = 'Buy for 10'
+
+    def right(self):
+        if PROFILE:
+            self.skin_ind += 1
+            global SKIN
+            SKIN = SKINS_LIST[self.skin_ind % 4]
+            if SKIN in PROFILE[1][3]:
+                self.buy.text = 'Bought'
+            else:
+                self.buy.text = 'Buy for 10'
+
+    def update(self):
+        self.screen.blit(self.image, (0, 0))
+        font = pygame.font.SysFont('Arial', 80)
+        text = font.render('The Roped', True, (100, 100, 120))
+        self.screen.blit(text, (240, 50))
+        font = pygame.font.SysFont('Arial', 18)
+        text = font.render('Version: 1.2.0 (realize)', True, (0, 0, 0))
+        self.screen.blit(text, (4, 477))
+        font = pygame.font.SysFont('Arial', 18)
+        text = font.render('''Войти в профиль, или создать новый''', True, (0, 0, 0))
+        self.screen.blit(text, (540, 9))
+        text = font.render('Key 1:', True, (0, 0, 0))
+        self.screen.blit(text, (620, 35))
+        text = font.render('Key 2:', True, (0, 0, 0))
+        self.screen.blit(text, (620, 87))
+        self.c_image = pygame.transform.scale(pygame.image.load('data/coin.png'), (60, 60))
+        self.screen.blit(self.c_image, (20, 20))
+        if PROFILE:
+            font = pygame.font.SysFont('Arial', 45)
+            text = font.render(PROFILE[1][2], True, (100, 100, 120))
+            self.screen.blit(text, (87, 24))
+
+        for box in self.input_boxes:
+            box.update()
+        for box in self.input_boxes:
+            box.draw(self.screen)
+        self.skin = pygame.transform.scale(pygame.image.load(f'data/skins/{SKINS_LIST[self.skin_ind % 4]}.png'),
+                                           (60, 75))
+        self.screen.blit(self.skin, (120, 220))
+        self.buy.change_text(self.buy.text)
+
+    def buttons_update(self):
+        for b in self.buttons:
+            b.update(self.screen)
+
+    def log_in(self):
+        a = profiles(self.input_box1.text, self.input_box2.text)
+        self.input_box1.clean()
+        self.input_box2.clean()
+        global PROFILE
+        PROFILE = a
+
+    def run(self):
+        self.m_running = True
+        while self.m_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if self.input_boxes:
+                    for box in self.input_boxes:
+                        box.handle_event(event)
+
+            self.update()
+            self.buttons_update()
+            pygame.display.update()
+            self.clock.tick(60)
+
+    def start(self):
+        global SKIN
+        if PROFILE and not (SKIN in PROFILE[1][3]):
+            SKIN = 'idle'
+        lev_menu = LevelMenu()
+        lev_menu.run()
+        SKIN = SKINS_LIST[self.skin_ind % 4]
 
 
-def on_play():
-    print("Сейчас должно было открыться меню уровней")
+class LevelMenu(Menu):
+    def button_draw(self):
+        Button(self.buttons, 'Назад', 770, 30, (20, 460), 4, pygame.font.SysFont("Arial", 20),
+               function=self.close)
+        Button(self.buttons, '1', 150, 150, (40, 175), 4, pygame.font.SysFont("Arial", 40), function=self.start_level_1)
+        Button(self.buttons, '2', 150, 150, (230, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_2)
+        Button(self.buttons, '3', 150, 150, (420, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_3)
+        Button(self.buttons, '4', 150, 150, (610, 175), 4, pygame.font.SysFont("Arial", 40),
+               function=self.start_level_4)
+        self.input_boxes = False
 
+    def update(self):
+        self.screen.blit(self.image, (0, 0))
 
-def on_exit():
-    sys.exit()
+    def close(self):
+        self.m_running = False
 
+    def mn_f(self):
+        if PROFILE:
+            from roped import MONEY
+            PROFILE[1][2] = str(int(PROFILE[1][2]) + MONEY)
+            mmm()
+            update_csv_cell((PROFILE[0], 2), PROFILE[1][2])
 
-def on_shop():
-    print("А тут магазин")
-
-
-def on_version():
-    print('Версии')
-
-
-def on_profiles():
-    print('Профили')
-
-
-def buttons_def():
-    Button((315, 200), " Играть    ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-           command=on_play)
-    Button((315, 265), " Магазин ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-           command=on_shop)
-    Button((315, 330), " Выход    ", 36, "red on yellow",
-           hover_colors="blue on orange", style=2, borderc=(255, 255, 0),
-           command=on_exit)
-    Button((0, 465), " Версии    ", 36, "red on green",
-           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
-           command=on_version)
-    Button((605, 5), " Профиль    ", 36, "red on green",
-           hover_colors="blue on green", style=2, borderc=(255, 255, 0),
-           command=on_profiles)
-
-
-def draw_nik(nik):
-    font = pygame.font.Font(None, 25)
-    text = font.render(nik, True, (0, 200, 0))
-    screen.blit(text, (800 - len(nik) * 12, 50))
-
-
-if __name__ == '__main__':
-    pygame.init()
-    screen = pygame.display.set_mode((WINDOW_SIZE))
-    pygame.display.set_caption('The Roped')
-    clock = pygame.time.Clock()
-    buttons = pygame.sprite.Group()
-    buttons_def()
-    image = load_image("fon.jpg")
-    running = True
-    screen.blit(image, (0, 0))
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-
-            # Текстовые данные на экране
-            # Название
-            font = pygame.font.Font(None, 100)
-            text = font.render('The Roped', True, (0, 200, 0))
-            screen.blit(text, (225, 100))
-
-            # Версия
-            font = pygame.font.Font(None, 25)
-            text = font.render('Version: 0.0.2 (alpha)', True, (0, 200, 0))
-            screen.blit(text, (5, 440))
-
-            # Вывод ника
-            draw_nik('Ник профиля')
-        buttons.update()
-        buttons.draw(screen)
-        clock.tick(FPS)
+    def start_level_1(self):
+        startt(SKIN, 0)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
         pygame.display.flip()
-pygame.quit()
+
+    def start_level_2(self):
+        startt(SKIN, 1)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
+        pygame.display.flip()
+
+    def start_level_3(self):
+        startt(SKIN, 2)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
+        pygame.display.flip()
+
+    def start_level_4(self):
+        startt(SKIN, 3)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.mn_f()
+        pygame.display.flip()
+
+
+music('data/melody/menu.mp3')
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    cd = Menu()
+    cd.run()
+    pygame.quit()
+    break
+sys.exit()
